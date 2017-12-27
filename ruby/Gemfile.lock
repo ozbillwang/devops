@@ -1,0 +1,22 @@
+PATH
+  remote: .
+  specs:
+    akamai-edgegrid (1.0.4)
+      inifile (~> 3.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    inifile (3.0.0)
+    multi_json (1.11.2)
+    simplecov (0.7.1)
+      multi_json (~> 1.0)
+      simplecov-html (~> 0.7.1)
+    simplecov-html (0.7.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  akamai-edgegrid!
+  simplecov (~> 0.7.1)
