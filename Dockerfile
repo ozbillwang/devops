@@ -20,8 +20,7 @@ RUN add-apt-repository -y ppa:longsleep/golang-backports
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q libssl-dev python-all wget vim python-pip php php-curl ruby-dev nodejs-dev npm php-pear php-dev ruby perl golang-go git
 RUN pip install httpie-edgegrid 
-RUN           apt add --update curl \
-           && curl -o /usr/local/bin/jq -L https://github.com/stedolan/jq/releases/download/jq-$VERSION/jq-linux64 \
+UN         curl -o /usr/local/bin/jq -L https://github.com/stedolan/jq/releases/download/jq-$VERSION/jq-linux64 \
            && chmod +x /usr/local/bin/jq  \
            && rm -rf /var/cache/apk/* 
 

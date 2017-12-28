@@ -20,6 +20,7 @@ import requests, logging, json, sys, os
 from http_calls import EdgeGridHttpCaller
 from random import randint
 from akamai.edgegrid import EdgeGridAuth,EdgeRc
+from config import EdgeGridConfig
 import urllib
 import argparse
 import logging
@@ -28,34 +29,30 @@ debug = False
 verbose = False
 session = requests.Session()
 
-logger = logging.getLogger(__name__)
-parser = argparse.ArgumentParser(description='Process command line options.')
-parser.add_argument('--verbose', '-v', default=False, action='count')
-parser.add_argument('--debug', '-d', default=False, action='count')
+# If all parameters are set already, use them.  Otherwise
+# use the config
+config = EdgeGridConfig({"verbose":False},section_name)
 
-args = parser.parse_args()
-arguments = vars(args)
-rc_path = os.path.expanduser("~/.edgerc")
+if hasattr(config, "debug") and config.debug:
+	debug = True
 
-edgerc = EdgeRc(rc_path)
-baseurl = 'https://%s' % edgerc.get(section_name, 'host')
+if hasattr(config, "verbose") and config.verbose:
+	verbose = True
+
 
 # Set the config options
-session.auth = EdgeGridAuth.from_edgerc(edgerc, section_name)
+session.auth = EdgeGridAuth(
+            client_token=config.client_token,
+            client_secret=config.client_secret,
+            access_token=config.access_token
+)
 
-if hasattr(edgerc, "debug") or arguments['debug']:
-	client.HTTPConnection.debuglevel = 1
-        logging.basicConfig()
-        logging.getLogger().setLevel(logging.DEBUG)
-        requests_log = logging.getLogger("requests.packages.urllib3")
-        requests_log.setLevel(logging.DEBUG)
-        requests_log.propagate = True
-        debug = True
+if hasattr(config, 'headers'):
+	session.headers.update(config.headers)
 
-if hasattr(edgerc, "verbose") or arguments['verbose']:
-  verbose = True
+baseurl = '%s://%s/' % ('https', config.host)
+httpCaller = EdgeGridHttpCaller(session, debug, verbose, baseurl)
 
-httpCaller = EdgeGridHttpCaller(session, debug,verbose, baseurl)
 
 # Request locations that support the diagnostic-tools
 print
