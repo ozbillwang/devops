@@ -52,8 +52,9 @@ ADD ./container/MOTD /opt/MOTD
 RUN echo "alias gen_edgerc=/opt/examples/python/gen_edgerc.py" >> /root/.bashrc
 RUN echo "alias verify_creds=/opt/examples/python/verify_creds.py" >> /root/.bashrc
 RUN echo "export PATH=${PATH}:/opt/bin"
-RUN echo "cat /container/MOTD" >> /root/.bashrc
+RUN echo "cat /opt/MOTD" >> /root/.bashrc
 RUN mkdir /root/.httpie
 ADD ./container/config.json /root/.httpie/config.json
 RUN echo "PS1='DevOps World Tour  >> '" >> /root/.bashrc
+WORKDIR "/opt"
 ENTRYPOINT ["/bin/bash"]
