@@ -47,7 +47,7 @@ RUN /usr/local/bin/akamai install property
 RUN /usr/local/bin/akamai install purge
 WORKDIR /opt/python
 RUN python /opt/python/tools/setup.py install
-RUN cpan -i Akamai::Edgegrid LWP::Protocol::https
+RUN cpan -iT Akamai::Edgegrid LWP::Protocol::https
 ADD ./container/MOTD /opt/MOTD
 RUN echo "alias gen_edgerc=/opt/examples/python/gen_edgerc.py" >> /root/.bashrc
 RUN echo "alias verify_creds=/opt/examples/python/verify_creds.py" >> /root/.bashrc
