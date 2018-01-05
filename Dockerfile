@@ -20,18 +20,18 @@ RUN add-apt-repository -y ppa:longsleep/golang-backports
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q libssl-dev python-all wget vim python-pip php php-curl ruby-dev nodejs-dev npm php-pear php-dev ruby perl golang-go git
 RUN pip install httpie-edgegrid 
-UN         curl -o /usr/local/bin/jq -L https://github.com/stedolan/jq/releases/download/jq-$VERSION/jq-linux64 \
+RUN         curl -o /usr/local/bin/jq -L https://github.com/stedolan/jq/releases/download/jq-$VERSION/jq-linux64 \
            && chmod +x /usr/local/bin/jq  \
            && rm -rf /var/cache/apk/* 
 
-ADD ./examples /opt/examples
-WORKDIR /opt/examples/php
+ADD . /opt
+WORKDIR /opt/php
 RUN ./composer.phar install
-WORKDIR /opt/examples/ruby
+WORKDIR /opt/ruby
 RUN gem install bundler
 RUN bundler install
 RUN gem install akamai-edgegrid
-WORKDIR /opt/examples/node
+WORKDIR /opt/node
 RUN npm install
 RUN npm install -g n; n 7.0.0
 RUN mkdir /goopt
@@ -45,14 +45,14 @@ RUN go build -o akamai . && mv akamai /usr/local/bin
 RUN chmod 755 /usr/local/bin/akamai
 RUN /usr/local/bin/akamai install property
 RUN /usr/local/bin/akamai install purge
-WORKDIR /opt/examples/python
-RUN python /opt/examples/python/tools/setup.py install
+WORKDIR /opt/python
+RUN python /opt/python/tools/setup.py install
 RUN cpan -i Akamai::Edgegrid LWP::Protocol::https
 ADD ./container/MOTD /opt/MOTD
 RUN echo "alias gen_edgerc=/opt/examples/python/gen_edgerc.py" >> /root/.bashrc
 RUN echo "alias verify_creds=/opt/examples/python/verify_creds.py" >> /root/.bashrc
 RUN echo "export PATH=${PATH}:/opt/bin"
-RUN echo "cat /opt/MOTD" >> /root/.bashrc
+RUN echo "cat /container/MOTD" >> /root/.bashrc
 RUN mkdir /root/.httpie
 ADD ./container/config.json /root/.httpie/config.json
 RUN echo "PS1='DevOps World Tour  >> '" >> /root/.bashrc

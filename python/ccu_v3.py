@@ -38,7 +38,7 @@ import os
 session = requests.Session()
 debug = False
 verbose = False
-section_name = "ccutest"
+section_name = "ccu"
 
 if sys.version_info[0] >= 3:
      # python3
@@ -76,7 +76,7 @@ def postPurgeRequest(action = "invalidate"):
 	
 	purge_obj = {
 			"objects" : [
-				"https://bc.akamaiapibootcamp.com/index.html"
+				"http://khunter.sandbox.akamaideveloper.com"
 			]
 		    }
 	print ("Adding %s request to queue - %s" % (action, json.dumps(purge_obj)));
