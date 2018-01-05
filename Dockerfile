@@ -41,6 +41,7 @@ RUN go build -o akamai . && mv akamai /usr/local/bin
 RUN chmod 755 /usr/local/bin/akamai
 RUN /usr/local/bin/akamai install property
 RUN /usr/local/bin/akamai install purge
+RUN /usr/local/bin/akamai install netstorage
 WORKDIR /opt/python
 RUN python /opt/python/tools/setup.py install
 RUN cpan -iT Akamai::Edgegrid LWP::Protocol::https
