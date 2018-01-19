@@ -63,7 +63,7 @@ RUN mkdir /goopt && \
 	chmod 755 /usr/local/bin/akamai && \
 	/usr/local/bin/akamai install property purge netstorage && \
 	rm -Rf /root/.akamai-cli/src/cli-*/release && \
-    go get github.com/hashicorp/terraform && \
+        go get github.com/hashicorp/terraform && \
 	go get github.com/akamai/AkamaiOPEN-edgegrid-golang && \
 	go get github.com/xeipuuv/gojsonschema && \
 	cd /goopt/src/github.com/hashicorp/terraform && \
