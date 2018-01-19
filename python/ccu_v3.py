@@ -80,7 +80,7 @@ def postPurgeRequest(action = "invalidate"):
 			]
 		    }
 	print ("Adding %s request to queue - %s" % (action, json.dumps(purge_obj)));
-	purge_post_result = httpCaller.postResult('/ccu/v3/invalidate/url', json.dumps(purge_obj))
+	purge_post_result = httpCaller.postResult('/ccu/v3/invalidate/url/staging', json.dumps(purge_obj))
 	return purge_post_result
 
 if __name__ == "__main__":
