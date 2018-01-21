@@ -14,7 +14,6 @@
 # limitations under the License.
 FROM ubuntu
 
-
 # Base System
 ENV GOPATH="/goopt" PATH="${PATH}:/goopt/bin"
 RUN apt-get update && \
@@ -29,7 +28,31 @@ RUN apt-get update && \
     echo "alias verify_creds=/opt/examples/python/verify_creds.py" >> /root/.bashrc && \
     echo "export PATH=${PATH}:/opt/bin" >> /root/.bashrc && \
     echo "cat /opt/container/MOTD" >> /root/.bashrc && \
-    echo "PS1='DevOps World Tour  >> '" >> /root/.bashrc
+    echo "PS1='DevOps World Tour [\w] >> '" >> /root/.bashrc
+
+# Akamai CLI / Terraform
+RUN mkdir /goopt && \
+    go get github.com/akamai/cli && \
+	cd /goopt/src/github.com/akamai/cli && \
+	curl https://glide.sh/get | sh && \
+	glide install && \
+	go build -o akamai . && \
+	mv akamai /usr/local/bin && \
+	chmod 755 /usr/local/bin/akamai && \
+        npm install -g n; n 7.0.0 && \
+	/usr/local/bin/akamai install property purge netstorage && \
+	rm -Rf /root/.akamai-cli/src/cli-*/release && \
+        go get github.com/hashicorp/terraform && \
+	go get github.com/akamai/AkamaiOPEN-edgegrid-golang && \
+	go get github.com/xeipuuv/gojsonschema && \
+	cd /goopt/src/github.com/hashicorp/terraform && \
+	git remote add akamai https://github.com/dshafik/terraform.git && \
+	git fetch --all && \
+	git checkout add-akamai-provider && \
+	make quickdev && \
+	mv /goopt/bin/terraform /usr/local/bin && \
+	rm -Rf /goopt && \
+	echo "ignore" > /root/.akamai-cli/.upgrade-check
 
 COPY . /opt
 
@@ -47,33 +70,9 @@ RUN cd /opt/php && \
 	gem install akamai-edgegrid && \
 	cd /opt/node && \
 	npm install && \
-    npm install -g n; n 7.0.0 && \
     cd /opt/python && \
     python /opt/python/tools/setup.py install && \
     cpan -iT Akamai::Edgegrid LWP::Protocol::https
-
-# Akamai CLI / Terraform
-RUN mkdir /goopt && \
-    go get github.com/akamai/cli && \
-	cd /goopt/src/github.com/akamai/cli && \
-	curl https://glide.sh/get | sh && \
-	glide install && \
-	go build -o akamai . && \
-	mv akamai /usr/local/bin && \
-	chmod 755 /usr/local/bin/akamai && \
-	/usr/local/bin/akamai install property purge netstorage && \
-	rm -Rf /root/.akamai-cli/src/cli-*/release && \
-        go get github.com/hashicorp/terraform && \
-	go get github.com/akamai/AkamaiOPEN-edgegrid-golang && \
-	go get github.com/xeipuuv/gojsonschema && \
-	cd /goopt/src/github.com/hashicorp/terraform && \
-	git remote add akamai https://github.com/dshafik/terraform.git && \
-	git fetch --all && \
-	git checkout add-akamai-provider && \
-	make quickdev && \
-	mv /goopt/bin/terraform /usr/local/bin && \
-	rm -Rf /goopt && \
-	echo "ignore" > /root/.akamai-cli/.upgrade-check
 
 WORKDIR "/opt"
 ENTRYPOINT ["/bin/bash"]
