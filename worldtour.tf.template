@@ -1,0 +1,45 @@
+provider "akamai" {
+    edgerc = "/root/.edgerc"
+    papi_section = "papi"
+}
+resource "akamai_property" "YourName_sandbox" {
+    name = "YourName.sandbox.akamaideveloper.com"
+    account_id = "act_B-C-1FRYVMN"
+    product_id = "prd_SPM"
+    cp_code = "657536"
+    contact = ["YourName@akamai.com"]
+    hostname = ["YourName.sandbox.akamaideveloper.com"]
+    network = "staging"
+rules {
+   rule {
+     name = "l10n"
+     comment = "Localize the default timezone"
+     criteria {
+       name = "path"
+       option {
+         key = "matchOperator"
+         value = "MATCHES_ONE_OF"
+       }
+       option {
+         key = "matchCaseSensitive"
+         value = "true"
+       }
+       option {
+         key = "values"
+         values = ["/"]
+       }
+     }
+     behavior {
+       name = "rewriteUrl"
+       option {
+         key = "behavior"
+         value = "REWRITE"
+       }
+       option {
+         key = "targetUrl"
+         value = "/America/Los_Angeles"
+       }
+     }
+   }
+ }
+}
