@@ -40,7 +40,7 @@ RUN mkdir /goopt && \
 	mv akamai /usr/local/bin && \
 	chmod 755 /usr/local/bin/akamai && \
         npm install -g n; n 7.0.0 && \
-	/usr/local/bin/akamai install property purge netstorage && \
+	/usr/local/bin/akamai install property purge netstorage auth && \
 	rm -Rf /root/.akamai-cli/src/cli-*/release && \
         go get github.com/hashicorp/terraform && \
 	go get github.com/akamai/AkamaiOPEN-edgegrid-golang && \
